@@ -1,0 +1,31 @@
+<%- include('../partials/header', { title: 'Departments' }) %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Departments</h2>
+  <a class="btn btn-primary" href="/departments/new" data-testid="new-department">+ New Department</a>
+</div>
+<table class="table table-striped bg-white shadow-sm" data-testid="departments-table">
+  <thead>
+    <tr><th>Name</th><th>Description</th><th class="text-end">Actions</th></tr>
+  </thead>
+  <tbody>
+    <% if (departments.length === 0) { %>
+    <tr><td colspan="3" class="text-center text-muted">No departments yet.</td></tr>
+    <% } %>
+    <% departments.forEach(function(d) { %>
+    <tr data-testid="department-row">
+      <td><%= d.name %></td>
+      <td><%= d.description || '—' %></td>
+      <td class="text-end">
+        <a class="btn btn-sm btn-outline-secondary" href="/departments/<%= d.id %>/edit"
+           data-testid="edit-department">Edit</a>
+        <form class="d-inline" method="post" action="/departments/<%= d.id %>/delete"
+              onsubmit="return confirm('Delete this department?');">
+          <button class="btn btn-sm btn-outline-danger" type="submit"
+                  data-testid="delete-department">Delete</button>
+        </form>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>

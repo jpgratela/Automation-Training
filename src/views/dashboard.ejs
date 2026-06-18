@@ -1,0 +1,29 @@
+<%- include('partials/header', { title: 'Dashboard' }) %>
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card text-bg-primary shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title">Total Employees</h6>
+        <p class="display-5 mb-0" data-testid="stat-employees"><%= employeeCount %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-bg-success shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title">Active Employees</h6>
+        <p class="display-5 mb-0" data-testid="stat-active"><%= activeCount %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-bg-secondary shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title">Departments</h6>
+        <p class="display-5 mb-0" data-testid="stat-departments"><%= departmentCount %></p>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>

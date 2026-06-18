@@ -1,0 +1,19 @@
+<%- include('../partials/header', { title: title }) %>
+<h2 class="mb-4"><%= title %></h2>
+<form method="post" action="<%= action %>" class="card card-body shadow-sm bg-white" style="max-width: 640px;">
+  <div class="mb-3">
+    <label class="form-label" for="name">Name</label>
+    <input class="form-control" id="name" name="name"
+           value="<%= department.name || '' %>" data-testid="name" required />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="description">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3"
+              data-testid="description"><%= department.description || '' %></textarea>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit" data-testid="save-department">Save</button>
+    <a class="btn btn-outline-secondary" href="/departments">Cancel</a>
+  </div>
+</form>
+<%- include('../partials/footer') %>

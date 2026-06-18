@@ -1,0 +1,43 @@
+{
+  "name": "hr-automation-app",
+  "version": "0.1.0",
+  "description": "Local HR system for practicing Playwright UI + API automation and CI/CD",
+  "main": "src/server.ts",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "build": "tsc",
+    "seed": "tsx src/seed.ts",
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:api": "playwright test tests/api"
+  },
+  "keywords": [
+    "hr",
+    "playwright",
+    "api-testing",
+    "jenkins",
+    "automation"
+  ],
+  "author": "jpgratela",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.8.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^24.7.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
