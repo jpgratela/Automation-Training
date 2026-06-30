@@ -11,6 +11,9 @@ jobs:
   test:
     name: Build & Playwright tests
     runs-on: ubuntu-latest
+    # Fail fast if a step hangs (e.g. browser install / a stuck test server)
+    # instead of letting the run sit until GitHub's 6-hour hard limit.
+    timeout-minutes: 20
 
     steps:
       - name: Check out code
