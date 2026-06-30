@@ -79,7 +79,7 @@ export function requireApiAuth(req: Request, res: Response, next: NextFunction):
     return;
   }
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as { sub: number; username: string };
+    const payload = jwt.verify(token, JWT_SECRET) as unknown as { sub: number; username: string };
     (req as Request & { userId?: number }).userId = payload.sub;
     next();
   } catch {
