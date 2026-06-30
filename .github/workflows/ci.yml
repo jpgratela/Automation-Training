@@ -1,0 +1,55 @@
+name: CI
+
+# Run on every push to main and on every pull request targeting main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Build & Playwright tests
+    runs-on: ubuntu-latest
+
+    # Run inside Microsoft's official Playwright image. It ships with the
+    # browsers AND all required OS libraries preinstalled, so we don't run
+    # `playwright install --with-deps` at runtime (that step shells out to
+    # apt-get and was hanging on the hosted runner). The tag MUST match the
+    # @playwright/test version in package.json (1.55.1) so the bundled
+    # browser build matches the client.
+    container:
+      image: mcr.microsoft.com/playwright:v1.55.1-noble
+
+    # Fail fast if a step hangs instead of letting the run sit for hours.
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # `npm ci` installs exactly what's in package-lock.json. better-sqlite3
+      # pulls a prebuilt Linux binary, so there's no native compile here.
+      - name: Install dependencies
+        run: npm ci
+
+      # Type-check / compile the TypeScript app (mirrors `npm run build`).
+      - name: Build
+        run: npm run build
+
+      # Playwright's webServer block seeds the DB and starts the app itself,
+      # then waits on /healthz before the suite runs. CI=true is set by GitHub
+      # Actions automatically, which enables retries + single-worker mode.
+      - name: Run Playwright tests
+        run: npm test
+        timeout-minutes: 15
+
+      # Keep the HTML report (and traces from any retried failures) so you can
+      # download and inspect results from the run's summary page.
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

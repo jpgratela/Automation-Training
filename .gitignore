@@ -19,5 +19,8 @@ data/*.db-wal
 # Env
 .env
 
+# Claude Code — keep project settings, exclude personal/work-specific skills
+.claude/skills/
+
 # Logs
 *.log

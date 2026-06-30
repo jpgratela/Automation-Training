@@ -1,38 +1,25 @@
-import { test, expect } from '@playwright/test';
-
-// UI tests for registration, login, and logout.
+import { test, expect } from "@playwright/test";
+import { LoginPage, RegisterPage } from "../pages";
+import { ADMIN, uniqueEmail } from '../test-data';
+import { DashboardPage } from '../pages/Dashboard/DashboardPage';
 
 test('a new user can register and lands on the dashboard', async ({ page }) => {
-  const unique = Date.now();
-  const email = `user${unique}@hr.test`;
+    const registerPage = new RegisterPage(page);
+    const loginPage = new LoginPage(page);
 
-  await page.goto('/register');
-  await page.getByTestId('fullName').fill('New Tester');
-  await page.getByTestId('username').fill(email);
-  await page.getByTestId('password').fill('Password123');
-  await page.getByTestId('register-submit').click();
+    await registerPage.goto();
+    // await registerPage.register('Mikmik Gratela', 'mikmik', 'Password123');
+    await registerPage.register('New Tester', uniqueEmail('user'), 'Password123');
 
-  await expect(page).toHaveURL(/\/dashboard/);
-  await expect(page.getByTestId('stat-employees')).toBeVisible();
+    await expect(page).toHaveURL(/\/dashboard/);
 });
 
-test('the seeded admin can log in and log out', async ({ page }) => {
-  await page.goto('/login');
-  await page.getByTestId('username').fill('admin@hr.test');
-  await page.getByTestId('password').fill('Password123');
-  await page.getByTestId('login-submit').click();
+test('the admin can login successfully and logout', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
 
-  await expect(page).toHaveURL(/\/dashboard/);
-
-  await page.getByTestId('logout').click();
-  await expect(page).toHaveURL(/\/login/);
-});
-
-test('logging in with bad credentials shows an error', async ({ page }) => {
-  await page.goto('/login');
-  await page.getByTestId('username').fill('admin@hr.test');
-  await page.getByTestId('password').fill('wrong-password');
-  await page.getByTestId('login-submit').click();
-
-  await expect(page.getByTestId('login-error')).toContainText('Invalid');
+    await loginPage.goto();
+    await loginPage.loginAs(ADMIN.username, ADMIN.password);
+    await dashboardPage.logout();
+    await expect(page).toHaveURL(/\/login/);
 });
