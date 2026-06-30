@@ -9,7 +9,27 @@ test.beforeEach('login', async({ page }) => {
 })
 
 test('create, edit, and delete departments', async({ page }) => {
+    const uniqueName = 'Veterinary';
     const department = new DepartmentListPage(page);
-
     await department.goto();
+
+    // Create
+    const newForm = await department.clickNew();
+    await newForm.fillData({
+        name: uniqueName,
+        description: 'Department of Veterinary medicine'
+    });
+    await newForm.save();
+    await department.expectVisible(uniqueName);
+
+    // Edit
+    const editForm = await department.edit(uniqueName);
+    await editForm.fillData({ description : 'Department of Architecture' });
+    await editForm.save();
+
+    await department.expectVisible('Department of Architecture');
+
+    // Delete
+    await department.delete(uniqueName);
+    await department.expectDeleted(uniqueName);
 })

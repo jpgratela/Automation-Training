@@ -11,3 +11,4 @@ export { DashboardPage } from './Dashboard/DashboardPage';
 export { EmployeesListPage } from './Employees/EmployeesListPage';
 export { EmployeeFormPage } from './Employees/EmployeeFormPage';
 export type { EmployeeFormData } from './Employees/EmployeeFormPage';
+export { DepartmentListPage } from './Departments/DepartmentListPage';
