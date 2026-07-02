@@ -113,8 +113,3 @@ Each new module follows the same pattern, which is the workflow to practice:
 3. Add EJS views under `src/views/`.
 4. Add tests under `tests/e2e/` and `tests/api/`.
 5. Commit & push → CI runs the growing suite.
-
-Candidate next modules: **Leave Requests**, **Job Positions**, **Attendance**,
-**Payroll**, **role-based access control**, **search & pagination**.
-
-> Ask and I'll add the next module end-to-end (DB + API + UI + tests).
