@@ -8,7 +8,7 @@ test.beforeEach('login', async({ page }) => {
     await new LoginPage(page).loginAs(ADMIN.username, ADMIN.password);
 })
 
-test('create, edit, and delete departments', async({ page }) => {
+test('create, search, edit, and delete departments', async({ page }) => {
     const uniqueName = 'Veterinary';
     const department = new DepartmentListPage(page);
     await department.goto();
@@ -22,11 +22,15 @@ test('create, edit, and delete departments', async({ page }) => {
     await newForm.save();
     await department.expectVisible(uniqueName);
 
+    // Search
+    await department.searchDepartment(uniqueName);
+    await department.searchButton.click();
+    await department.expectVisible('Veterinary');
+
     // Edit
     const editForm = await department.edit(uniqueName);
     await editForm.fillData({ description : 'Department of Architecture' });
     await editForm.save();
-
     await department.expectVisible('Department of Architecture');
 
     // Delete

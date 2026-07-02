@@ -5,11 +5,15 @@ import { DepartmentFormPage } from "./DepartmentFormPage";
 export class DepartmentListPage extends BasePage {
     readonly newDepartmentButton : Locator;
     readonly rows : Locator;
+    readonly searchNameInput : Locator;
+    readonly searchButton : Locator;
 
     constructor(page: Page){
         super(page);
         this.newDepartmentButton = page.getByTestId('new-department');
         this.rows = page.getByTestId('department-row');
+        this.searchNameInput = page.getByTestId('search-name');
+        this.searchButton = page.getByTestId('search-submit');
     }
 
     async goto(){
@@ -42,5 +46,9 @@ export class DepartmentListPage extends BasePage {
 
     async expectDeleted(text: string): Promise<void> {
         await expect(this.row(text)).toHaveCount(0);
-    }  
+    }
+
+    async searchDepartment(data: string): Promise<void> {
+        await this.searchNameInput.fill(data);
+    }
 }
