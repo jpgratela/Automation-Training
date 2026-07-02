@@ -3,6 +3,20 @@
   <h2 class="mb-0">Departments</h2>
   <a class="btn btn-primary" href="/departments/new" data-testid="new-department">+ New Department</a>
 </div>
+<form class="card bg-white shadow-sm mb-3" method="get" action="/departments"
+      data-testid="department-search">
+  <div class="card-body row g-3 align-items-end">
+    <div class="col-md-6">
+      <label class="form-label" for="search-name">Name</label>
+      <input class="form-control" type="text" id="search-name" name="name"
+             value="<%= filters.name %>" data-testid="search-name">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit" data-testid="search-submit">Search</button>
+      <a class="btn btn-outline-secondary" href="/departments" data-testid="search-reset">Reset</a>
+    </div>
+  </div>
+</form>
 <table class="table table-striped bg-white shadow-sm" data-testid="departments-table">
   <thead>
     <tr><th>Name</th><th>Description</th><th class="text-end">Actions</th></tr>

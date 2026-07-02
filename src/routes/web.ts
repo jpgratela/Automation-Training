@@ -76,9 +76,22 @@ webRouter.get('/dashboard', (_req: Request, res: Response) => {
 // Departments CRUD
 // ---------------------------------------------------------------------------
 
-webRouter.get('/departments', (_req, res) => {
-  const departments = db.prepare('SELECT * FROM departments ORDER BY name').all();
-  res.render('departments/list', { departments });
+webRouter.get('/departments', (req, res) => {
+  const name = (req.query.name as string | undefined)?.trim() || '';
+
+  const where: string[] = [];
+  const params: unknown[] = [];
+  if (name) {
+    where.push('name LIKE ?');
+    params.push(`%${name}%`);
+  }
+
+  const sql =
+    'SELECT * FROM departments' +
+    (where.length ? ` WHERE ${where.join(' AND ')}` : '') +
+    ' ORDER BY name';
+  const departments = db.prepare(sql).all(...params);
+  res.render('departments/list', { departments, filters: { name } });
 });
 
 webRouter.get('/departments/new', (_req, res) => {
@@ -120,15 +133,42 @@ webRouter.post('/departments/:id/delete', (req, res) => {
 // Employees CRUD
 // ---------------------------------------------------------------------------
 
-webRouter.get('/employees', (_req, res) => {
-  const employees = db
-    .prepare(
-      `SELECT e.*, d.name AS department_name
-       FROM employees e LEFT JOIN departments d ON d.id = e.department_id
-       ORDER BY e.last_name, e.first_name`
-    )
-    .all();
-  res.render('employees/list', { employees });
+webRouter.get('/employees', (req, res) => {
+  const name = (req.query.name as string | undefined)?.trim() || '';
+  const department = (req.query.department as string | undefined)?.trim() || '';
+  const job_title = (req.query.job_title as string | undefined)?.trim() || '';
+  let status = (req.query.status as string | undefined) || 'all';
+  if (status !== 'active' && status !== 'inactive') status = 'all';
+
+  const where: string[] = [];
+  const params: unknown[] = [];
+  if (name) {
+    where.push("(e.first_name || ' ' || e.last_name) LIKE ?");
+    params.push(`%${name}%`);
+  }
+  if (department) {
+    where.push('d.name LIKE ?');
+    params.push(`%${department}%`);
+  }
+  if (job_title) {
+    where.push('e.job_title LIKE ?');
+    params.push(`%${job_title}%`);
+  }
+  if (status !== 'all') {
+    where.push('e.status = ?');
+    params.push(status);
+  }
+
+  const sql =
+    `SELECT e.*, d.name AS department_name
+     FROM employees e LEFT JOIN departments d ON d.id = e.department_id` +
+    (where.length ? ` WHERE ${where.join(' AND ')}` : '') +
+    ' ORDER BY e.last_name, e.first_name';
+  const employees = db.prepare(sql).all(...params);
+  res.render('employees/list', {
+    employees,
+    filters: { name, department, job_title, status },
+  });
 });
 
 webRouter.get('/employees/new', (_req, res) => {

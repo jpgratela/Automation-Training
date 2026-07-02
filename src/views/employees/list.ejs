@@ -3,6 +3,44 @@
   <h2 class="mb-0">Employees</h2>
   <a class="btn btn-primary" href="/employees/new" data-testid="new-employee">+ New Employee</a>
 </div>
+<form class="card bg-white shadow-sm mb-3" method="get" action="/employees"
+      data-testid="employee-search">
+  <div class="card-body row g-3 align-items-end">
+    <div class="col-md-3">
+      <label class="form-label" for="search-name">Name</label>
+      <input class="form-control" type="text" id="search-name" name="name"
+             value="<%= filters.name %>" data-testid="search-name">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label" for="search-department">Department</label>
+      <input class="form-control" type="text" id="search-department" name="department"
+             value="<%= filters.department %>" data-testid="search-department">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label" for="search-job-title">Job Title</label>
+      <input class="form-control" type="text" id="search-job-title" name="job_title"
+             value="<%= filters.job_title %>" data-testid="search-job-title">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label d-block">Status</label>
+      <div class="btn-group" role="group" aria-label="Status filter">
+        <input class="btn-check" type="radio" name="status" id="status-active" value="active"
+               <%= filters.status === 'active' ? 'checked' : '' %> data-testid="status-active">
+        <label class="btn btn-outline-secondary" for="status-active">Active</label>
+        <input class="btn-check" type="radio" name="status" id="status-inactive" value="inactive"
+               <%= filters.status === 'inactive' ? 'checked' : '' %> data-testid="status-inactive">
+        <label class="btn btn-outline-secondary" for="status-inactive">Inactive</label>
+        <input class="btn-check" type="radio" name="status" id="status-all" value="all"
+               <%= filters.status === 'all' ? 'checked' : '' %> data-testid="status-all">
+        <label class="btn btn-outline-secondary" for="status-all">All</label>
+      </div>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit" data-testid="search-submit">Search</button>
+      <a class="btn btn-outline-secondary" href="/employees" data-testid="search-reset">Reset</a>
+    </div>
+  </div>
+</form>
 <table class="table table-striped bg-white shadow-sm" data-testid="employees-table">
   <thead>
     <tr>
