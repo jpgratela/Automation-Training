@@ -42,7 +42,7 @@ export class EmployeeFormPage extends BasePage{
         if(data.firstName !== undefined) await this.firstName.fill(data.firstName);
         if(data.lastName !== undefined) await this.lastName.fill(data.lastName);
         if(data.emailAddress !== undefined) await this.emailAddress.fill(data.emailAddress);
-        if(data.department !== undefined) await this.department.fill(data.department);
+        if(data.department !== undefined) await this.department.selectOption(data.department);
         if(data.jobTitle !== undefined) await this.jobTitle.fill(data.jobTitle);
         if(data.hireDate !== undefined) await this.hireDate.fill(data.hireDate);
         if(data.salary !== undefined) await this.salary.fill(String(data.salary));

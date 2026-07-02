@@ -8,7 +8,7 @@ test.beforeEach('login', async({ page }) => {
     await new LoginPage(page).loginAs(ADMIN.username, ADMIN.password);
 })
 
-test('create, edit, and delete employee', async({ page }) => {
+test('create, search, edit, and delete employee', async({ page }) => {
     const emailAddress = uniqueEmail('playwright');
     const employee = new EmployeesListPage(page);
     await employee.goto();
@@ -19,17 +19,27 @@ test('create, edit, and delete employee', async({ page }) => {
         firstName: 'Pat',
         lastName: 'Tester',
         emailAddress,
+        department: 'Engineering',
         jobTitle: 'Automation Engineer',
     });
-
     await newForm.save();
     await employee.expectVisible(emailAddress);
+
+    // Search
+    await employee.searchEmployee({
+        name: 'Tester',
+        department: 'Engineering',
+        jobTitle: 'Automation',
+        status: 'active'
+    });
+    await employee.expectVisible(emailAddress);
+    await expect(employee.rows).toHaveCount(1);
 
     // Edit
     const editForm = await employee.edit(emailAddress);
     await editForm.fillData({ jobTitle : 'Software QA Engineer'});
     await editForm.save();
-    await employee.expectVisible('Software QA Engineer');
+    await expect(employee.row(emailAddress)).toContainText('Software QA Engineer');
 
     // Delete
     await employee.delete(emailAddress);
