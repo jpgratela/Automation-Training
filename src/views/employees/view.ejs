@@ -1,0 +1,60 @@
+<%- include('../partials/header', { title: employee.first_name + ' ' + employee.last_name }) %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0" data-testid="employee-title">
+    <%= employee.first_name %> <%= employee.last_name %>
+  </h2>
+  <div class="d-flex gap-2">
+    <a class="btn btn-primary" href="/employees/<%= employee.id %>/edit"
+       data-testid="edit-employee">Edit</a>
+    <a class="btn btn-outline-secondary" href="/employees"
+       data-testid="back-to-employees">← Back to Employees</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card card-body shadow-sm bg-white text-center">
+      <% if (employee.photo_path) { %>
+      <img src="<%= employee.photo_path %>" alt="Employee photo"
+           class="img-fluid rounded mb-3" data-testid="employee-photo" />
+      <% } else { %>
+      <div class="d-flex align-items-center justify-content-center bg-light rounded mb-3 text-muted"
+           style="height: 220px;" data-testid="employee-photo-placeholder">
+        No photo
+      </div>
+      <% } %>
+      <form method="post" action="/employees/<%= employee.id %>/photo"
+            enctype="multipart/form-data" data-testid="photo-upload-form">
+        <div class="mb-2">
+          <input class="form-control" type="file" name="photo" accept="image/*"
+                 data-testid="photo-input" required />
+        </div>
+        <button class="btn btn-outline-primary w-100" type="submit"
+                data-testid="upload-photo">Upload photo</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <table class="table bg-white shadow-sm" data-testid="employee-details">
+      <tbody>
+        <tr><th style="width: 30%;">First name</th><td data-testid="detail-first-name"><%= employee.first_name %></td></tr>
+        <tr><th>Last name</th><td data-testid="detail-last-name"><%= employee.last_name %></td></tr>
+        <tr><th>Email</th><td data-testid="detail-email"><%= employee.email %></td></tr>
+        <tr><th>Department</th><td data-testid="detail-department"><%= employee.department_name || '—' %></td></tr>
+        <tr><th>Job title</th><td data-testid="detail-job-title"><%= employee.job_title || '—' %></td></tr>
+        <tr><th>Hire date</th><td data-testid="detail-hire-date"><%= employee.hire_date || '—' %></td></tr>
+        <tr><th>Salary</th><td data-testid="detail-salary"><%= employee.salary != null ? employee.salary : '—' %></td></tr>
+        <tr>
+          <th>Status</th>
+          <td data-testid="detail-status">
+            <span class="badge <%= employee.status === 'active' ? 'text-bg-success' : 'text-bg-secondary' %>">
+              <%= employee.status %>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('../partials/footer') %>
